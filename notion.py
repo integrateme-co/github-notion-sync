@@ -1,10 +1,10 @@
 import requests, json, os
 
-token = 'secret_5KfCWRI1TLWbTpKrrq3WjoyIcvAww1IYn9sPei3bMOo'
+#token = 'secret_zQqkmCeTz7sWn88UW4tdlTQL1fS7Io9LUNFHeGoD5Cd'
 # token = request.COOKIES['oauth_token']
 # token = str(token)
 
-databaseId = 'f22775996b054d97ad5eaf15b1e15a30'
+#databaseId = 'f22775996b054d97ad5eaf15b1e15a30'
 
 # headers = {
 #     "Authorization": "Bearer " + token,
@@ -17,11 +17,8 @@ def readDatabase(databaseId, headers):
 
     res = requests.request("POST", readUrl, headers=headers)
     data = res.json()
-    #results[0].properties.ID.number
-    # print(res.text)
     for obj in data['results']:
         print(obj['properties']['ID']['number'])
-    #print(data['results'][0]['properties']['ID']['number'])
 
     with open('./NotionDB.json', 'w', encoding='utf8') as f:
         json.dump(data, f, ensure_ascii=False)
@@ -29,14 +26,9 @@ def readDatabase(databaseId, headers):
 #readDatabase(databaseId, headers)
 
 
-def searchDB(database_id, issueID):
+def searchDB(database_id, issueID, headers):
     queryURL = f"https://api.notion.com/v1/databases/{database_id}/query"
 
-    headers = {
-    "Authorization": "Bearer " + token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2021-05-13"
-}
 
     queryParams = {
 					"database_id": database_id,
@@ -188,9 +180,12 @@ def createPage(databaseId, headers, title, issueURL, issueID):
     print(res.text)
 
 
-oauth_header = {
-    "Authorization": "Basic NzI3NzQxMjUtNmI0Yi00ZTU4LTlkYTYtZmVkOTRkYzUwYjZhOnNlY3JldF84Q25hekF6WXRFWFFjM0xlWTVkRVJnczRFOFBEZ3FFVlFReHpzZ2U1T3NM",
-}
+# oauth_header = {
+#     "Authorization": "Basic NzI3NzQxMjUtNmI0Yi00ZTU4LTlkYTYtZmVkOTRkYzUwYjZhOnNlY3JldF84Q25hekF6WXRFWFFjM0xlWTVkRVJnczRFOFBEZ3FFVlFReHpzZ2U1T3NM",
+# }
+
+#createPage(databaseId, headers, title, issueURL, issueID)
+#createPage('f2277599-6b05-4d97-ad5e-af15b1e15a30', headers, 'Kadak', 'https://www.youtube.com/feed/history', 1233)
 
 def get_bearer(code):
     requestURL = "https://api.notion.com/v1/oauth/token"
@@ -244,4 +239,10 @@ def get_pageID(OAuth_token):
     search_body = {}
     response = requests.post(searchURL, headers=search_header, data=search_body)
     response = response.json()
-    return (response)
+    db_id = response['results'][0]['id']
+    return (db_id)
+
+# data = get_pageID('secret_zQqkmCeTz7sWn88UW4tdlTQL1fS7Io9LUNFHeGoD5Cd')
+# print(data)
+# with open('data.json', 'w') as f:
+#     json.dump(data, f)

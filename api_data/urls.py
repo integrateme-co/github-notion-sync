@@ -1,10 +1,10 @@
 from django.urls import path
-from . views import get_user, save_apis, save_integration, get_token
+from . views import get_user, get_webhook, save_apis, save_integration, get_token
 
 urlpatterns = [
     path('user', get_user),
     path('save', save_apis),
     path('inte', save_integration),
-    path('sync/<intID>',get_user ),
+    path('sync/<intID>',get_webhook ),
     path('token', get_token)
 ]

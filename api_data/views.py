@@ -9,6 +9,7 @@ from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from api_data.models import apiStoreModel, integrationModel
 from .serializers import apiStoreSerializer, integrationSerializer
+domain = "http://127.0.0.1:8000/test/sync/"
 
 @api_view(['GET', 'POST'])
 def get_user(request, intID):
@@ -54,16 +55,45 @@ def save_integration(request):
         serializer = integrationSerializer(data, many=True)
         return Response(serializer.data)
 
-
+@login_required
 @api_view(['GET', 'POST'])
 def get_token(request):
     notionCode = request.GET.get('code', None)
     oAuth_token = get_bearer(notionCode)
-    new_record = integrationModel(
+    db_id = get_pageID(oAuth_token)
+    new_record = integrationModel.objects.create(
         user_id = request.user.id,
         notion_Oauth= oAuth_token,
-        notion_pg_id='uzair',
-        notion_db_id= 'uzair'
+        notion_pg_id='null',
+        notion_db_id= db_id
     )
+    new_record.save()
+    sync_url = domain + str(new_record.id)
+    return Response(sync_url)
 
-    return Response(new_record.id)
+
+@api_view(['GET', 'POST'])
+def get_webhook(request, intID):
+    required_rec = integrationModel.objects.filter(id=intID).first()
+    oauth_token = required_rec.notion_Oauth
+    db_id = required_rec.notion_db_id
+    headers = {
+    "Authorization": "Bearer " + oauth_token,
+    "Content-Type": "application/json",
+    "Notion-Version": "2021-05-13"
+}
+    bodyData = request.data
+    print(bodyData)
+    if request.method == 'POST':
+        action = bodyData['action']
+        issueTitle = bodyData['issue']['title']
+        link = bodyData['issue']['html_url']
+        issueID = bodyData['issue']['id']
+
+        if action == 'opened':
+            createPage(db_id, headers, issueTitle, link, issueID)
+        elif action == 'closed':
+            closedIssueID = bodyData['issue']['id']
+            closedPageID = searchDB(db_id, closedIssueID, headers)
+            Move2Completed(closedPageID, headers)
+    return Response(bodyData)

@@ -1,17 +1,19 @@
 from django.contrib.auth import login
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.decorators import api_view
+from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view, renderer_classes
+from drf_yasg import renderers
 from rest_framework.response import Response
 from notion import *
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from api_data.models import apiStoreModel, integrationModel
 from .serializers import apiStoreSerializer, integrationSerializer
-domain = "http://127.0.0.1:8000/test/sync/"
+domain = "http://127.0.0.1:8000/github-notion/sync/"
 
 @api_view(['GET', 'POST'])
+@renderer_classes([renderers.OpenAPIRenderer, renderers.SwaggerUIRenderer])
 def get_user(request, intID):
     data = integrationModel.objects.filter(id=intID)
     serializer = integrationSerializer(data, many=True)
@@ -49,6 +51,8 @@ def save_integration(request):
         if serialized_data.is_valid():
             serialized_data.save()
             return Response(serialized_data.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
         data = integrationModel.objects.filter(user_id=request.user.id)

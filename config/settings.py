@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    # Swagger
+    'drf_yasg'
 ]
 
 SITE_ID = 1

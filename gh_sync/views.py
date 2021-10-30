@@ -5,7 +5,9 @@ from rest_framework.decorators import api_view, renderer_classes
 from drf_yasg import renderers
 from notion import Move2Completed, createPage, searchDB
 
+
 domain = "http://api-integrateme.herokuapp.com/github-notion/sync/"
+
 
 
 @api_view(['GET', 'POST'])

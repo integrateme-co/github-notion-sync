@@ -11,7 +11,7 @@ from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from api_data.models import apiStoreModel, integrationModel
 from .serializers import apiStoreSerializer, integrationSerializer
-domain = "http://127.0.0.1:8000/github-notion/sync/"
+domain = "https://api.integrateme.co/github-notion/sync/"
 
 @api_view(['GET', 'POST'])
 def get_user(request, intID):

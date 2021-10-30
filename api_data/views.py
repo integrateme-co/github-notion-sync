@@ -5,6 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view, renderer_classes
 from drf_yasg import renderers
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 from notion import *
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
@@ -13,13 +14,12 @@ from .serializers import apiStoreSerializer, integrationSerializer
 domain = "http://127.0.0.1:8000/github-notion/sync/"
 
 @api_view(['GET', 'POST'])
-@renderer_classes([renderers.OpenAPIRenderer, renderers.SwaggerUIRenderer])
 def get_user(request, intID):
     data = integrationModel.objects.filter(id=intID)
     serializer = integrationSerializer(data, many=True)
     return Response(serializer.data)
 
-
+@swagger_auto_schema(method='post', request_body=apiStoreSerializer)
 @login_required
 @api_view(['GET', 'POST'])
 def save_apis(request):
@@ -40,7 +40,7 @@ def save_apis(request):
         return Response(serializer.data)
 
 
-
+@swagger_auto_schema(method='post', request_body=integrationSerializer)
 @api_view(['GET', 'POST'])
 def save_integration(request):
     if request.method == 'POST':

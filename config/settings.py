@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+LOGIN_REDIRECT_URL = '/'
 # Specify the context processors as follows:
 TEMPLATES = [
     {

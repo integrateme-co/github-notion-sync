@@ -1,6 +1,7 @@
 from django.contrib.auth import login
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
+from rest_framework import response
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view, renderer_classes
 from drf_yasg import renderers
@@ -12,6 +13,12 @@ from django.contrib.auth.decorators import login_required
 from api_data.models import apiStoreModel, integrationModel
 from .serializers import apiStoreSerializer, integrationSerializer
 domain = "https://api.integrateme.co/github-notion/sync/"
+
+
+@api_view(['GET'])
+def redirect_view(request):
+    response = redirect('https://integrateme.co/')
+    return response
 
 @api_view(['GET', 'POST'])
 def get_user(request, intID):

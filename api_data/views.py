@@ -47,6 +47,13 @@ def save_apis(request):
         return Response(serializer.data)
 
 
+@login_required
+@api_view(['GET'])
+def get_url(request):
+    data = integrationModel.objects.filter(user_id=request.user.id)
+    serizalizer = integrationSerializer(data, many=True)
+    return Response(serizalizer.data)
+
 @swagger_auto_schema(method='post', request_body=integrationSerializer)
 @api_view(['GET', 'POST'])
 def save_integration(request):
@@ -76,10 +83,11 @@ def get_token(request):
         user_id = request.user.id,
         notion_Oauth= oAuth_token,
         notion_pg_id='null',
-        notion_db_id= db_id
+        notion_db_id= db_id,
     )
-    new_record.save()
     sync_url = domain + str(new_record.id)
+    new_record.save()
+    req_record = integrationModel.objects.filter(id=new_record.id).update(sync_url=sync_url)
     return Response(sync_url)
 
 

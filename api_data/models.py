@@ -17,3 +17,4 @@ class integrationModel(models.Model):
      notion_Oauth = models.CharField(max_length=550)
      notion_pg_id = models.CharField(max_length=550)
      notion_db_id = models.CharField(max_length=550)
+     sync_url = models.CharField(max_length=550, blank=True, null=True)

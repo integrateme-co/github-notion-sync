@@ -2,8 +2,9 @@
 
 Sync Your Repository's Issues with Notion Board
 
-![illustration](https://notion-automations.com/_nuxt/img/github-notion.aa7d9c1.svg)
-
+<p align="center">
+  <img src="https://notion-automations.com/_nuxt/img/github-notion.aa7d9c1.svg" />
+</p>
 
 
 ## Backend Architecture

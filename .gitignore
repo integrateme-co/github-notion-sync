@@ -1,5 +1,7 @@
 client_secret_1092676558803-damdb6d7kg1epugmr6ka30soabfv7vuh.apps.googleusercontent.com.json
 delMe.py
-dj-env/
 env/
 .env
+__pycache__/
+dj-env/
+db.sqlite3

@@ -5,7 +5,6 @@ from decouple import config
 def read_database(database_id, headers):
     """Read the whole Notion DB"""
     read_url = f"https://api.notion.com/v1/databases/{database_id}/query"
-
     res = requests.request("POST", read_url, headers=headers)
     data = res.json()
     for obj in data['results']:

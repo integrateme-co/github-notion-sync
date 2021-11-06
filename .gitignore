@@ -5,3 +5,4 @@ env/
 __pycache__/
 dj-env/
 db.sqlite3
+.vscode/

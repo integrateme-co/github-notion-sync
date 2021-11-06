@@ -1,72 +1,45 @@
-import requests, json, os
+import json
+import requests
 
-def readDatabase(databaseId, headers):
-    readUrl = f"https://api.notion.com/v1/databases/{databaseId}/query"
+def readDatabase(database_id, headers):
+    """Read the whole Notion DB"""
+    read_url = f"https://api.notion.com/v1/databases/{database_id}/query"
 
-    res = requests.request("POST", readUrl, headers=headers)
+    res = requests.request("POST", read_url, headers=headers)
     data = res.json()
     for obj in data['results']:
         print(obj['properties']['ID']['number'])
 
-    with open('./NotionDB.json', 'w', encoding='utf8') as f:
-        json.dump(data, f, ensure_ascii=False)
 
 
 
+def searchDB(database_id, issue_id, headers):
+    """Search for a Card in Notion DB"""
+    query_url = f"https://api.notion.com/v1/databases/{database_id}/query"
 
-def searchDB(database_id, issueID, headers):
-    queryURL = f"https://api.notion.com/v1/databases/{database_id}/query"
 
-
-    queryParams = {
+    query_params = {
 					"database_id": database_id,
 					"filter": {
 						"property": 'ID',
 						"number": {
-							"equals": issueID
+							"equals": issue_id
 						}
 					}
 				}
 
-    data = json.dumps(queryParams)
-    response = requests.request("POST", queryURL, headers=headers, data=data)
+    data = json.dumps(query_params)
+    response = requests.request("POST", query_url, headers=headers, data=data)
 
     print(response.status_code)
     response = response.json()
     return response['results'][0]['id']
 
+def Move2Completed(page_id, headers):
+    """Move a page or card to completed coloum"""
+    update_url = f"https://api.notion.com/v1/pages/{page_id}"
 
-def Move2WithPR(pageId, headers):
-    updateUrl = f"https://api.notion.com/v1/pages/{pageId}"
-
-    updateData = {
-        "properties": {
-    "Status":{
-  "id": "=_;M",
-  "type": "select",
-  "select": {
-    "id": "2",
-    "name": "Issues With Pull Request",
-    "color": "yellow"
-  }
-}
-}
-    }
-
-    data = json.dumps(updateData)
-
-    response = requests.request("PATCH", updateUrl, headers=headers, data=data)
-
-    print(response.status_code)
-    print(response.text)
-
-
-
-
-def Move2Completed(pageId, headers):
-    updateUrl = f"https://api.notion.com/v1/pages/{pageId}"
-
-    updateData = {
+    update_data = {
                 "properties": {
             "Status":{
             "id": "=_;M",
@@ -80,9 +53,9 @@ def Move2Completed(pageId, headers):
         }
     }
 
-    data = json.dumps(updateData)
+    data = json.dumps(update_data)
 
-    response = requests.request("PATCH", updateUrl, headers=headers, data=data)
+    response = requests.request("PATCH", update_url, headers=headers, data=data)
 
     print(response.status_code)
     print(response.text)
@@ -91,10 +64,11 @@ def Move2Completed(pageId, headers):
 
 
 
-def Move2Open(pageId, headers):
-    updateUrl = f"https://api.notion.com/v1/pages/{pageId}"
+def Move2Open(page_id, headers):
+    """Add a new page or card in open coloum"""
+    update_url = f"https://api.notion.com/v1/pages/{page_id}"
 
-    updateData = {
+    update_data = {
         "properties": {
     "Status":{
   "id": "=_;M",
@@ -108,9 +82,9 @@ def Move2Open(pageId, headers):
 }
     }
 
-    data = json.dumps(updateData)
+    data = json.dumps(update_data)
 
-    response = requests.request("PATCH", updateUrl, headers=headers, data=data)
+    response = requests.request("PATCH", update_url, headers=headers, data=data)
 
     print(response.status_code)
     print(response.text)
@@ -118,12 +92,12 @@ def Move2Open(pageId, headers):
 
 
 
-def createPage(databaseId, headers, title, issueURL, issueID):
+def createPage(database_id, headers, title, issue_url, issue_id):
+    """Create a new Page"""
+    create_url = 'https://api.notion.com/v1/pages'
 
-    createUrl = 'https://api.notion.com/v1/pages'
-
-    newPageData = {
-        "parent": { "database_id": databaseId },
+    new_page_data = {
+        "parent": { "database_id": database_id },
         "properties": {
             "Name": {
                 "title": [
@@ -148,71 +122,51 @@ def createPage(databaseId, headers, title, issueURL, issueID):
             "URL": {
                 "id": "U>Vt",
                 "type": "url",
-                "url": f"{issueURL}"
+                "url": f"{issue_url}"
         },
 
         "ID": {
                 "id": "eEq_",
                 "type": "number",
-                "number": issueID
-        }          
-
-        }
+                "number": issue_id}}
     }
-    
-    data = json.dumps(newPageData)
+    data = json.dumps(new_page_data)
 
-    res = requests.request("POST", createUrl, headers=headers, data=data)
+    res = requests.request("POST", create_url, headers=headers, data=data)
 
     print("Status: ", res.status_code)
     print(res.text)
 
 
-
-
 def get_bearer(code):
-    requestURL = "https://api.notion.com/v1/oauth/token"
+    """Get User's Bearer Code"""
+    request_url = "https://api.notion.com/v1/oauth/token"
 
-    bodyData = {
-        "grant_type":"authorization_code",
-        "code":f"{code}",
-        "redirect_uri": "https://127.0.0.1:8000/notion-github"
-    }
-
-    data = json.dumps(bodyData)
-
-    response = requests.post(requestURL, headers=oauth_header, data=data)
-    print(response.status_code)
-    print(response.text)
-
-
-oauth_header = {'Authorization': 'Basic NzI3NzQxMjUtNmI0Yi00ZTU4LTlkYTYtZmVkOTRkYzUwYjZhOnNlY3JldF9OS3NnZHFWNVFvOHdQVk93dkc5dUJCQkZjaXp3VnlQWGtXYmVoOTRhM0lx'}
-
-def get_bearer(code):
-    requestURL = "https://api.notion.com/v1/oauth/token"
-
-    bodyData = {
+    body_data = {
         "grant_type" : "authorization_code",
         "code" : f'{code}',
     }
+    oauth_header = {
+    'Authorization': 'Basic NzI3NzQxMjUtNmI0Yi00ZTU4LTlkYTYtZmVkOTRkYzUwYjZhOnNlY3JldF9OS3NnZHFWNVFvOHdQVk93dkc5dUJCQkZjaXp3VnlQWGtXYmVoOTRhM0lx'
+}
 
-    response = requests.post(requestURL, headers=oauth_header, data=bodyData)
+    response = requests.post(request_url, headers=oauth_header, data=body_data)
     response = response.json()
-    return (response['access_token'])
+    return response['access_token']
 
 
-def get_pageID(OAuth_token):
-
-    searchURL = "https://api.notion.com/v1/search"
+def get_pageID(auth_token):
+    """Get Notion's Page ID"""
+    search_url = "https://api.notion.com/v1/search"
 
     search_header = {
-        "Authorization": f"{OAuth_token}",
+        "Authorization": f"{auth_token}",
         "Notion-Version": "2021-08-16",
         "Content-Type": "application/json"
     }
 
     search_body = {}
-    response = requests.post(searchURL, headers=search_header, data=search_body)
+    response = requests.post(search_url, headers=search_header, data=search_body)
     response = response.json()
     db_id = response['results'][0]['id']
-    return (db_id)
+    return db_id

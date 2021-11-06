@@ -113,6 +113,6 @@ def get_webhook(request, int_id):
             createPage(db_id, headers, issue_title, link, issue_id)
         elif action == 'closed':
             closed_issue_id = body_data['issue']['id']
-            closed_page_id = searchDB(db_id, closed_issue_id, headers)
-            Move2Completed(closed_page_id, headers)
+            closed_page_id = search_db(db_id, closed_issue_id, headers)
+            move_2_completed(closed_page_id, headers)
     return Response(body_data)

@@ -2,7 +2,7 @@ import json
 import requests
 from decouple import config
 
-def readDatabase(database_id, headers):
+def read_database(database_id, headers):
     """Read the whole Notion DB"""
     read_url = f"https://api.notion.com/v1/databases/{database_id}/query"
 
@@ -14,7 +14,7 @@ def readDatabase(database_id, headers):
 
 
 
-def searchDB(database_id, issue_id, headers):
+def search_db(database_id, issue_id, headers):
     """Search for a Card in Notion DB"""
     query_url = f"https://api.notion.com/v1/databases/{database_id}/query"
 
@@ -36,7 +36,7 @@ def searchDB(database_id, issue_id, headers):
     response = response.json()
     return response['results'][0]['id']
 
-def Move2Completed(page_id, headers):
+def move_2_completed(page_id, headers):
     """Move a page or card to completed coloum"""
     update_url = f"https://api.notion.com/v1/pages/{page_id}"
 

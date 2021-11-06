@@ -1,5 +1,6 @@
 import json
 import requests
+from decouple import config
 
 def readDatabase(database_id, headers):
     """Read the whole Notion DB"""
@@ -146,8 +147,9 @@ def get_bearer(code):
         "grant_type" : "authorization_code",
         "code" : f'{code}',
     }
+    token = config('NOTION_BASIC')
     oauth_header = {
-    'Authorization': 'Basic NzI3NzQxMjUtNmI0Yi00ZTU4LTlkYTYtZmVkOTRkYzUwYjZhOnNlY3JldF9OS3NnZHFWNVFvOHdQVk93dkc5dUJCQkZjaXp3VnlQWGtXYmVoOTRhM0lx'
+    'Authorization': f'Basic {token}'
 }
 
     response = requests.post(request_url, headers=oauth_header, data=body_data)

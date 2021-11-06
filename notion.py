@@ -1,17 +1,5 @@
 import requests, json, os
 
-#token = 'secret_zQqkmCeTz7sWn88UW4tdlTQL1fS7Io9LUNFHeGoD5Cd'
-# token = request.COOKIES['oauth_token']
-# token = str(token)
-
-#databaseId = 'f22775996b054d97ad5eaf15b1e15a30'
-
-# headers = {
-#     "Authorization": "Bearer " + token,
-#     "Content-Type": "application/json",
-#     "Notion-Version": "2021-05-13"
-# }
-
 def readDatabase(databaseId, headers):
     readUrl = f"https://api.notion.com/v1/databases/{databaseId}/query"
 
@@ -23,7 +11,7 @@ def readDatabase(databaseId, headers):
     with open('./NotionDB.json', 'w', encoding='utf8') as f:
         json.dump(data, f, ensure_ascii=False)
 
-#readDatabase(databaseId, headers)
+
 
 
 def searchDB(database_id, issueID, headers):
@@ -72,7 +60,7 @@ def Move2WithPR(pageId, headers):
     print(response.status_code)
     print(response.text)
 
-#Move2WithPR('0f53f1c2-2917-4ce0-b129-da1605547740', headers)
+
 
 
 def Move2Completed(pageId, headers):
@@ -100,7 +88,7 @@ def Move2Completed(pageId, headers):
     print(response.text)
 
 
-#Move2Completed('0f53f1c2-2917-4ce0-b129-da1605547740', headers)
+
 
 
 def Move2Open(pageId, headers):
@@ -127,7 +115,7 @@ def Move2Open(pageId, headers):
     print(response.status_code)
     print(response.text)
 
-#Move2Open('0f53f1c2-2917-4ce0-b129-da1605547740', headers)
+
 
 
 def createPage(databaseId, headers, title, issueURL, issueID):
@@ -180,12 +168,7 @@ def createPage(databaseId, headers, title, issueURL, issueID):
     print(res.text)
 
 
-# oauth_header = {
-#     "Authorization": "Basic NzI3NzQxMjUtNmI0Yi00ZTU4LTlkYTYtZmVkOTRkYzUwYjZhOnNlY3JldF84Q25hekF6WXRFWFFjM0xlWTVkRVJnczRFOFBEZ3FFVlFReHpzZ2U1T3NM",
-# }
 
-#createPage(databaseId, headers, title, issueURL, issueID)
-#createPage('f2277599-6b05-4d97-ad5e-af15b1e15a30', headers, 'Kadak', 'https://www.youtube.com/feed/history', 1233)
 
 def get_bearer(code):
     requestURL = "https://api.notion.com/v1/oauth/token"
@@ -215,15 +198,7 @@ def get_bearer(code):
 
     response = requests.post(requestURL, headers=oauth_header, data=bodyData)
     response = response.json()
-    # if response['error']:
-    #     error_res = {
-    #         'error':"Invalid Grant or Notion Code"
-    #     }
-    #     return error_res
     return (response['access_token'])
-
-# ans = get_bearer('245762e8-a8ee-4a08-a125-dfc0c893fe5d')
-# print(ans)
 
 
 def get_pageID(OAuth_token):
@@ -241,8 +216,3 @@ def get_pageID(OAuth_token):
     response = response.json()
     db_id = response['results'][0]['id']
     return (db_id)
-
-# data = get_pageID('secret_zQqkmCeTz7sWn88UW4tdlTQL1fS7Io9LUNFHeGoD5Cd')
-# print(data)
-# with open('data.json', 'w') as f:
-#     json.dump(data, f)

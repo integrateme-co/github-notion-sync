@@ -1,15 +1,24 @@
 from django.contrib.auth import login
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.decorators import api_view
+from rest_framework import response
+from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view, renderer_classes
+from drf_yasg import renderers
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 from notion import *
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from api_data.models import apiStoreModel, integrationModel
 from .serializers import apiStoreSerializer, integrationSerializer
-domain = "http://127.0.0.1:8000/test/sync/"
+domain = "https://api.integrateme.co/github-notion/sync/"
+
+
+@api_view(['GET'])
+def redirect_view(request):
+    response = redirect('https://integrateme.co/')
+    return response
 
 @api_view(['GET', 'POST'])
 def get_user(request, intID):
@@ -17,7 +26,7 @@ def get_user(request, intID):
     serializer = integrationSerializer(data, many=True)
     return Response(serializer.data)
 
-
+@swagger_auto_schema(method='post', request_body=apiStoreSerializer)
 @login_required
 @api_view(['GET', 'POST'])
 def save_apis(request):
@@ -38,7 +47,14 @@ def save_apis(request):
         return Response(serializer.data)
 
 
+@login_required
+@api_view(['GET'])
+def get_url(request):
+    data = integrationModel.objects.filter(user_id=request.user.id)
+    serizalizer = integrationSerializer(data, many=True)
+    return Response(serizalizer.data)
 
+@swagger_auto_schema(method='post', request_body=integrationSerializer)
 @api_view(['GET', 'POST'])
 def save_integration(request):
     if request.method == 'POST':
@@ -49,6 +65,8 @@ def save_integration(request):
         if serialized_data.is_valid():
             serialized_data.save()
             return Response(serialized_data.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
         data = integrationModel.objects.filter(user_id=request.user.id)
@@ -65,10 +83,11 @@ def get_token(request):
         user_id = request.user.id,
         notion_Oauth= oAuth_token,
         notion_pg_id='null',
-        notion_db_id= db_id
+        notion_db_id= db_id,
     )
-    new_record.save()
     sync_url = domain + str(new_record.id)
+    new_record.save()
+    req_record = integrationModel.objects.filter(id=new_record.id).update(sync_url=sync_url)
     return Response(sync_url)
 
 

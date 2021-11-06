@@ -1,0 +1,64 @@
+Metadata-Version: 2.0
+Name: django-heroku
+Version: 0.0.0
+Summary: This is a (work in progress) Django library for Heroku apps.
+Home-page: https://github.com/heroku/django-heroku
+Author: Kenneth Reitz
+Author-email: kreitz@salesforce.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Dist: dj-database-url
+Requires-Dist: whitenoise
+Requires-Dist: django
+
+
+django-heroku
+=============
+
+This is a (work in progress) Django library for Heroku apps.
+
+It could serve many purposes, including (but not limited to):
+
+-  Settings configuration (static files / whitenoise)
+-  Logging configuration (currently not covered at all)
+-  Test runner (important for CI)
+-  Potentially, starter template (hard to maintain)
+-  Potentially, gunicorn runner (prob not neccessary)
+
+It will depend on the following libraries:
+
+-  dj-database-url (or django-environ)
+-  psycopg2
+-  WhiteNoise
+-  Gunicorn, potentially
+
+--------------
+
+Django 2.0 will be targetted.
+
+The name of the library is pretty set, but still to–be–determined.
+
+Possible Usage
+--------------
+
+In ``settings.py``:
+
+::
+
+    …
+    # Configure Django App for Heroku.
+    django_heroku.configure(locals())
+
+

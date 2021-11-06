@@ -144,7 +144,6 @@ HeapDict==1.0.1
 html5lib @ file:///tmp/build/80754af9/html5lib_1593446221756/work
 httpagentparser==1.9.1
 httplib2==0.18.1
-idna @ file:///tmp/build/80754af9/idna_1593446292537/work
 imageio @ file:///tmp/build/80754af9/imageio_1594161405741/work
 imagesize==1.2.0
 importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1602276842396/work

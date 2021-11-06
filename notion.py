@@ -65,7 +65,7 @@ def move_2_completed(page_id, headers):
 
 
 
-def Move2Open(page_id, headers):
+def move_2_open(page_id, headers):
     """Add a new page or card in open coloum"""
     update_url = f"https://api.notion.com/v1/pages/{page_id}"
 
@@ -93,7 +93,7 @@ def Move2Open(page_id, headers):
 
 
 
-def createPage(database_id, headers, title, issue_url, issue_id):
+def create_page(database_id, headers, title, issue_url, issue_id):
     """Create a new Page"""
     create_url = 'https://api.notion.com/v1/pages'
 
@@ -157,7 +157,7 @@ def get_bearer(code):
     return response['access_token']
 
 
-def get_pageID(auth_token):
+def get_page_id(auth_token):
     """Get Notion's Page ID"""
     search_url = "https://api.notion.com/v1/search"
 

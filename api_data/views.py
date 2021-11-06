@@ -79,7 +79,7 @@ def get_token(request):
     """Get User's Token"""
     notion_code = request.GET.get('code', None)
     oauth_token = get_bearer(notion_code)
-    db_id = get_pageID(oauth_token)
+    db_id = get_page_id(oauth_token)
     new_record = integrationModel.objects.create(
         user_id = request.user.id,
         notion_Oauth= oauth_token,
@@ -110,7 +110,7 @@ def get_webhook(request, int_id):
         issue_id = body_data['issue']['id']
 
         if action == 'opened':
-            createPage(db_id, headers, issue_title, link, issue_id)
+            create_page(db_id, headers, issue_title, link, issue_id)
         elif action == 'closed':
             closed_issue_id = body_data['issue']['id']
             closed_page_id = search_db(db_id, closed_issue_id, headers)

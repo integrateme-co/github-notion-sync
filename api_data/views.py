@@ -42,7 +42,7 @@ def save_apis(request):
     if request.method == 'GET':
         data = apiStoreModel.objects.filter(id=request.user.id)
         serializer = apiStoreSerializer(data, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @login_required

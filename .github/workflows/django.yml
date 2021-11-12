@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, master]
   pull_request:
-    branches: [ dev ]
+    branches: [ dev, master]
 
 jobs:
   build:
@@ -31,4 +31,4 @@ jobs:
         DEBUG: ${{secrets.DEBUG}}
         CRYPTO_KEY: ${{secrets.CRYPTO_KEY}}
       run: |
-        python manage.py test
+        pytest

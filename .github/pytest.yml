@@ -1,0 +1,16 @@
+on:
+  push:
+    branches: [ dev, master]
+  pull_request:
+    branches: [ dev, master]
+name: on push
+jobs:
+  gitHubActionForPytest:
+    name: GitHub Action for pytest
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: GitHub Action for pytest
+      uses: cclauss/GitHub-Action-for-pytest@master
+      with:
+        args: pytest

@@ -31,5 +31,4 @@ jobs:
         DEBUG: ${{secrets.DEBUG}}
         CRYPTO_KEY: ${{secrets.CRYPTO_KEY}}
       run: |
-        pip install pytest
-        pytest .
+        pytest

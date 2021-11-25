@@ -2,6 +2,7 @@ from pathlib import Path
 import django_heroku
 from decouple import config
 import sentry_sdk
+import os
 from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

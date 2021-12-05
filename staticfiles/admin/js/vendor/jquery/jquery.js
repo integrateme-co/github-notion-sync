@@ -1037,11 +1037,7 @@ function createDisabledPseudo( disabled ) {
 
 				// Option elements defer to a parent optgroup if present
 				if ( "label" in elem ) {
-					if ( "label" in elem.parentNode ) {
-						return elem.parentNode.disabled === disabled;
-					} else {
-						return elem.disabled === disabled;
-					}
+					return "label" in elem.parentNode ? elem.parentNode.disabled === disabled : elem.disabled === disabled;
 				}
 
 				// Support: IE 6 - 11
@@ -8470,11 +8466,7 @@ jQuery.fn.extend( {
 				return;
 			}
 
-			if ( valueIsFunction ) {
-				val = value.call( this, i, jQuery( this ).val() );
-			} else {
-				val = value;
-			}
+			val = valueIsFunction ? value.call( this, i, jQuery( this ).val() ) : value;
 
 			// Treat null/undefined as ""; convert numbers to string
 			if ( val == null ) {

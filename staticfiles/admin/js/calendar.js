@@ -127,11 +127,7 @@ depends on core.js for utility functions like removeChildren or quickElement
                 if (i % 7 === 0 && currentDay !== 1) {
                     tableRow = quickElement('tr', tableBody);
                 }
-                if ((currentDay === todayDay) && (month === todayMonth) && (year === todayYear)) {
-                    todayClass = 'today';
-                } else {
-                    todayClass = '';
-                }
+                todayClass = (currentDay === todayDay) && (month === todayMonth) && (year === todayYear) ? 'today' : '';
 
                 // use UTC function; see above for explanation.
                 if (isSelectedMonth && currentDay === selected.getUTCDate()) {

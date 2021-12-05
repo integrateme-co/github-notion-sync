@@ -213,12 +213,7 @@
         },
         handleClockQuicklink: function(num, val) {
             let d;
-            if (val === -1) {
-                d = DateTimeShortcuts.now();
-            }
-            else {
-                d = new Date(1970, 1, 1, val, 0, 0, 0);
-            }
+            d = val === -1 ? DateTimeShortcuts.now() : new Date(1970, 1, 1, val, 0, 0, 0);
             DateTimeShortcuts.clockInputs[num].value = d.strftime(get_format('TIME_INPUT_FORMATS')[0]);
             DateTimeShortcuts.clockInputs[num].focus();
             DateTimeShortcuts.dismissClock(num);

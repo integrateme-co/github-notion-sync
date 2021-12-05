@@ -17,12 +17,7 @@
         // build a jQuery instance, we normalize how we use modules
         // that require this pattern but the window provided is a noop
         // if it's defined (how jquery works)
-        if (typeof window !== 'undefined') {
-          jQuery = require('jquery');
-        }
-        else {
-          jQuery = require('jquery')(root);
-        }
+        jQuery = typeof window !== 'undefined' ? require('jquery') : require('jquery')(root);
       }
       factory(jQuery);
       return jQuery;
@@ -266,11 +261,7 @@ var requirejs, require, define;
 
         //Normalize according
         if (prefix) {
-            if (plugin && plugin.normalize) {
-                name = plugin.normalize(name, makeNormalize(relResourceName));
-            } else {
-                name = normalize(name, relResourceName);
-            }
+            name = plugin && plugin.normalize ? plugin.normalize(name, makeNormalize(relResourceName)) : normalize(name, relResourceName);
         } else {
             name = normalize(name, relResourceName);
             parts = splitPrefix(name);
@@ -302,11 +293,7 @@ var requirejs, require, define;
         },
         exports: function (name) {
             var e = defined[name];
-            if (typeof e !== 'undefined') {
-                return e;
-            } else {
-                return (defined[name] = {});
-            }
+            return typeof e !== 'undefined' ? e : (defined[name] = {});
         },
         module: function (name) {
             return {
@@ -3173,11 +3160,7 @@ S2.define('select2/data/base',[
 
     id += Utils.generateChars(4);
 
-    if (data.id != null) {
-      id += '-' + data.id.toString();
-    } else {
-      id += '-' + Utils.generateChars(4);
-    }
+    id += data.id != null ? '-' + data.id.toString() : '-' + Utils.generateChars(4);
     return id;
   };
 
@@ -5133,11 +5116,7 @@ S2.define('select2/defaults',[
 
     var languages;
 
-    if (!$.isArray(language)) {
-      languages = [language];
-    } else {
-      languages = language;
-    }
+    languages = !$.isArray(language) ? [language] : language;
 
     var resolvedLanguages = [];
 

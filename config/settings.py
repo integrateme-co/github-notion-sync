@@ -57,7 +57,20 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/'
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+            'redirect_uri': 'https://integrateme.co/?scroll=true'
+        }
+    }
+}
+
+# LOGIN_REDIRECT_URL = '/?scroll=true'
 # Specify the context processors as follows:
 TEMPLATES = [
     {
